@@ -3,8 +3,8 @@ package model;
 import java.util.Date;
 
 abstract public class Audio {
-    private final int ID;
-    private static int counter;
+    private final long ID;
+    private static long counter = 0;
     private String title;
     private String artistName;
     private int playNumber;
@@ -26,7 +26,7 @@ abstract public class Audio {
         this.cover = cover;
     }
 
-    public int getID() {
+    public long getID() {
         return ID;
     }
 
@@ -90,4 +90,3 @@ abstract public class Audio {
         return cover;
     }
 }
-
