@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Artist extends UserAccount {
+abstract public class Artist extends UserAccount {   // abstracting is by my own decision
     private double income;
     private String biography;
     private final ArrayList<UserAccount> followers;
