@@ -1,4 +1,6 @@
-package model;
+package model.audio;
+
+import model.Genre;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package model;
+package model.audio;
 
 public class Music extends Audio {
     private String lyric;

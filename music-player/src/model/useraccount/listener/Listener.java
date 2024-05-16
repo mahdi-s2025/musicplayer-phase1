@@ -1,4 +1,9 @@
-package model;
+package model.useraccount.listener;
+
+import model.Genre;
+import model.Playlist;
+import model.audio.Audio;
+import model.useraccount.UserAccount;
 
 import java.util.ArrayList;
 import java.util.Date;

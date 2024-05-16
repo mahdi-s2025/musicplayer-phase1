@@ -1,4 +1,6 @@
-package model;
+package model.useraccount.artist;
+
+import model.audio.Podcast;
 
 import java.util.ArrayList;
 import java.util.Date;

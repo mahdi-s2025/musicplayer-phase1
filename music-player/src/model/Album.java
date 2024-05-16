@@ -1,5 +1,7 @@
 package model;
 
+import model.audio.Music;
+
 import java.util.ArrayList;
 
 public class Album {

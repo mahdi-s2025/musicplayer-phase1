@@ -1,5 +1,8 @@
 package model;
 
+import model.audio.Audio;
+import model.useraccount.UserAccount;
+
 import java.util.ArrayList;
 
 public class Database {

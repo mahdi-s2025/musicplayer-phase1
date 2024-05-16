@@ -1,4 +1,6 @@
-package model;
+package model.useraccount.artist;
+
+import model.useraccount.UserAccount;
 
 import java.util.ArrayList;
 import java.util.Date;
