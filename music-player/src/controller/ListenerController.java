@@ -2,11 +2,12 @@ package controller;
 
 import model.Database;
 import model.Genre;
+import model.Playlist;
+import model.audio.Audio;
 import model.useraccount.UserAccount;
 import model.useraccount.listener.FreeListener;
 import model.useraccount.listener.Listener;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
@@ -33,7 +34,7 @@ public class ListenerController {
         return listener;
     }
 
-    public void signUp(String username, String password, String fullName,
+    public FreeListener signUp(String username, String password, String fullName,
                        String email, String phoneNumber, int dateOfBirthTmp) {
         int dayOfMonth = dateOfBirthTmp % 100;
         dateOfBirthTmp /= 100;
@@ -47,15 +48,17 @@ public class ListenerController {
 
         FreeListener freeListener = new FreeListener(username, password, fullName,
                 email, phoneNumber, dateOfBirth);
+        freeListener.setCredit(50);
         setListener(freeListener);
         Database.getDatabase().getUserAccounts().add(freeListener);
+        return freeListener;
     }
 
-    public boolean uniqueUsername(String username) {
+    public UserAccount findUsername(String username) {
         for (UserAccount user : Database.getDatabase().getUserAccounts()) {
-            if (user.getUsername().equals(username)) return false;
+            if (user.getUsername().equals(username)) return user;
         }
-        return true;
+        return null;
     }
 
     public int passwordStrength(String password) {
@@ -98,12 +101,65 @@ public class ListenerController {
         return phoneNumberMatcher.matches();
     }
 
+    public Listener login(String username, String password) {
+        Listener targetListener = (Listener) findUsername(username);
+        if (targetListener.getPassword().equals(password)) {
+            setListener(targetListener);
+            return targetListener;
+        }
+        return null;
+    }
+
     public boolean setFavoriteGenres(String input) {
         String[] tmpGenres = input.split(",");
         if (tmpGenres.length == 0 || tmpGenres.length > 4) return false;
         for (String genre : tmpGenres) {
-            listener.getFavoriteGenres().add(Genre.valueOf(genre));
+            if (!listener.getFavoriteGenres().add(Genre.valueOf(genre))) return false;
         }
+        return true;
+    }
+
+    public Playlist createPlaylist(String name) {
+        if (listener instanceof FreeListener) {
+            if (listener.getPlaylists().size() < FreeListener.getMaxPlaylistCreationNumber()) {
+                Playlist newPlaylist = new Playlist(name, listener.getFullName());
+                listener.getPlaylists().add(newPlaylist);
+                return newPlaylist;
+            }
+            else return null;
+        }
+        Playlist newPlaylist = new Playlist(name, listener.getFullName());
+        listener.getPlaylists().add(newPlaylist);
+        return newPlaylist;
+    }
+
+    public Playlist findListenerPlaylist(String name) {
+        for (Playlist playlist : listener.getPlaylists()) {
+            if (playlist.getName().equals(name)) return playlist;
+        }
+        return null;
+    }
+
+    public Audio findAudio(int ID) {
+        for (Audio audio : Database.getDatabase().getAudioFiles()) {
+            if (audio.getID() == ID) return audio;
+        }
+        return null;
+    }
+
+    public boolean addAudioToPlaylist(String playlistName, int ID) {
+        Playlist targetPlaylist = findListenerPlaylist(playlistName);
+        Audio targetAudio = findAudio(ID);
+
+        if (listener instanceof FreeListener) {
+            if (targetPlaylist.getAudios().size() < FreeListener.getMaxMusicsNumberInPlaylist()) {
+                targetPlaylist.getAudios().add(targetAudio);
+                return true;
+            }
+            else return false;
+        }
+
+        targetPlaylist.getAudios().add(targetAudio);
         return true;
     }
 }
