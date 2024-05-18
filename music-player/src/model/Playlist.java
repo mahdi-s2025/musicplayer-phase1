@@ -49,9 +49,13 @@ public class Playlist {
 
         for (int i = 0; i < audios.size()-1; i++) {
             text.append(audios.get(i).getTitle());
+            text.append(" ");
+            text.append(audios.get(i).getID());
             text.append(", ");
         }
         text.append(audios.getLast().getTitle());
+        text.append(" ");
+        text.append(audios.getLast().getID());
         text.append("}\n");
         return text.toString();
     }
