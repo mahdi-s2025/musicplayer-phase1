@@ -39,4 +39,17 @@ public class Album {
     public ArrayList<Music> getMusicList() {
         return musicList;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder text = new StringBuilder(name + "\t" + singerName + "\tID: " + ID + "\n"
+                + "music list: {");
+        for (int i = 0; i < musicList.size()-1; i++) {
+            text.append(musicList.get(i).getTitle());
+            text.append(", ");
+        }
+        text.append(musicList.getLast().getTitle());
+        text.append("}\n");
+        return text.toString();
+    }
 }
