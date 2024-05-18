@@ -16,4 +16,22 @@ public class Singer extends Artist {
     public ArrayList<Album> getAlbums() {
         return albums;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder text = new StringBuilder(getFullName() + "\tuser name: " + getUsername() + "\n"
+                + "phone number: " + getPhoneNumber() + "\n"
+                + "email: " + getEmail() + "\n"
+                + "date of birth: " + getDateOfBirth() + "\n"
+                + "biography: " + getBiography() + "\n"
+                + "albums: {");
+        for (int i = 0; i < getAlbums().size()-1; i++) {
+            text.append(getAlbums().get(i).getName());
+            text.append(", ");
+        }
+        text.append(getAlbums().getLast().getName());
+        text.append("}\n");
+
+        return text.toString();
+    }
 }

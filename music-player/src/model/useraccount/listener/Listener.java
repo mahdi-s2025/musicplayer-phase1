@@ -53,4 +53,23 @@ abstract public class Listener extends UserAccount {   // abstracting is by my o
     public ArrayList<Genre> getFavoriteGenres() {
         return favoriteGenres;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder text = new StringBuilder(getFullName() + "\tuser name: " + getUsername() + "\tcredit: " + credit + "\n"
+                + "phone number: " + getPhoneNumber() + "\n"
+                + "email: " + getEmail() + "\n"
+                + "date of birth: " + getDateOfBirth() + "\n"
+                + "favorite genres: " + getFavoriteGenres() + "\n"
+                + "playlists: {");
+
+        for (int i = 0; i < playlists.size()-1; i++) {
+            text.append(playlists.get(i).getName());
+            text.append(", ");
+        }
+        text.append(playlists.getLast().getName());
+        text.append("}\n");
+
+        return text.toString();
+    }
 }

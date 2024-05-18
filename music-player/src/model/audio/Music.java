@@ -24,4 +24,14 @@ public class Music extends Audio {
     public void setAlbumID(int albumID) {
         this.albumID = albumID;
     }
+
+    @Override
+    public String toString() {
+        return (getTitle() + "\t" + getArtistName() + "\tID: " + getID() + "\tAlbum ID: " + albumID + "\n"
+        + "Publish Date: " + getPublishDate() + "\n"
+        + "Likes: " + getLikeNumber() + "\tPlays: " + getPlayNumber() + "\tGenre: " + getGenre() + "\n"
+        + "Link: " + getLink() + "\n"
+        + "Cover: " + getCover() + "\n"
+        + "Lyric: " + lyric + "\n");
+    }
 }
