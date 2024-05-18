@@ -14,6 +14,7 @@ abstract public class Listener extends UserAccount {   // abstracting is by my o
     private double credit;
     private final ArrayList<Playlist> playlists;
     private final Map<Audio, Integer> audioPlayNum;
+    private final ArrayList<UserAccount> following;
     private Date subExpirationDate;
     private final ArrayList<Genre> favoriteGenres;
 
@@ -22,6 +23,7 @@ abstract public class Listener extends UserAccount {   // abstracting is by my o
         credit = 0.0;
         playlists = new ArrayList<>();
         audioPlayNum = new HashMap<>();
+        following = new ArrayList<>();
         favoriteGenres = new ArrayList<>();
         subExpirationDate = null;
     }
@@ -40,6 +42,10 @@ abstract public class Listener extends UserAccount {   // abstracting is by my o
 
     public Map<Audio, Integer> getAudioPlayNum() {
         return audioPlayNum;
+    }
+
+    public ArrayList<UserAccount> getFollowing() {
+        return following;
     }
 
     public Date getSubscriptionExpirationDate() {

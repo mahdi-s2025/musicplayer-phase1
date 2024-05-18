@@ -8,10 +8,10 @@ import model.useraccount.UserAccount;
 import model.useraccount.listener.FreeListener;
 import model.useraccount.listener.Listener;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ListenerController {
     private static ListenerController listenerController;
@@ -161,5 +161,80 @@ public class ListenerController {
 
         targetPlaylist.getAudios().add(targetAudio);
         return true;
+    }
+
+    public Audio playAudio(int ID) {
+        Audio targetAudio = findAudio(ID);
+        if (targetAudio == null) return null;
+        targetAudio.setPlayNumber(targetAudio.getPlayNumber() + 1);
+        listener.getAudioPlayNum().put(targetAudio, listener.getAudioPlayNum().get(targetAudio) + 1); // It might do incorrectly.
+        return targetAudio;
+    }
+
+    public boolean likeAudio(int ID) {
+        Audio targetAudio = findAudio(ID);
+        if (targetAudio == null) return false;
+        targetAudio.setLikeNumber(targetAudio.getLikeNumber() + 1);
+        return true;
+    }
+
+    public ArrayList<Audio> searchAudio(String key) {
+        ArrayList<Audio> results = new ArrayList<>();
+        for (Audio audio : Database.getDatabase().getAudioFiles()) {
+            if (audio.getTitle().equals(key) || audio.getArtistName().equals(key)) {
+                results.add(audio);
+            }
+        }
+        return results;
+    }
+
+    public ArrayList<Audio> sortAudios(String flag) {  // maybe should not use comparator interface
+        ArrayList<Audio> results = Database.getDatabase().getAudioFiles();
+        Comparator<Audio> audioComparator = null;
+        if (flag.equals("L")) {
+            audioComparator = (Audio o1, Audio o2) -> o2.getLikeNumber() - o1.getLikeNumber();
+        } else if (flag.equals("P")) {
+            audioComparator = (Audio o1, Audio o2) -> o2.getPlayNumber() - o1.getPlayNumber();
+        } else return null;
+        results.sort(audioComparator);
+        return results;
+    }
+
+    public List<Audio> filterAudios(String flag, String key) {
+        List<Audio> results = null;
+        if (flag.equals("A")) {
+            results = Database.getDatabase().getAudioFiles().stream().filter(
+                    audio -> audio.getArtistName().equals(key)).toList();
+        } else if (flag.equals("G")) {
+            results = Database.getDatabase().getAudioFiles().stream().filter(
+                    audio -> audio.getGenre().toString().equals(key)).toList();
+        }  else if (flag.equals("D")) {
+            String[] tmpStartEndDate = key.split("-");
+            int tmpStartDate = Integer.parseInt(tmpStartEndDate[0]);
+            int tmpEndDate = Integer.parseInt(tmpStartEndDate[1]);
+
+            int dayOfMonth = tmpStartDate % 100;
+            tmpStartDate /= 100;
+
+            int month = (tmpStartDate % 100) - 1;
+            tmpStartDate /= 100;
+
+            int year = tmpStartDate;
+            Date startDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
+
+            dayOfMonth = tmpEndDate % 100;
+            tmpEndDate /= 100;
+
+            month = (tmpEndDate % 100) - 1;
+            tmpEndDate /= 100;
+
+            year = tmpEndDate;
+            Date endDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
+
+            results = Database.getDatabase().getAudioFiles().stream().filter(
+                    audio -> (audio.getPublishDate().after(startDate) &&
+                            audio.getPublishDate().before(endDate))).toList();
+        }
+        return results;
     }
 }
