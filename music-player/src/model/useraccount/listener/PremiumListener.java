@@ -16,4 +16,24 @@ public class PremiumListener extends Listener {
     public void setSubRemainingDays(int subRemainingDays) {
         this.subRemainingDays = subRemainingDays;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder text = new StringBuilder(getFullName() + "\tuser name: " + getUsername() + "\tcredit: " + getCredit() + "\n"
+                + "phone number: " + getPhoneNumber() + "\n"
+                + "email: " + getEmail() + "\n"
+                + "date of birth: " + getDateOfBirth() + "\n"
+                + "subscription remaining days: " + subRemainingDays + "\n"
+                + "favorite genres: " + getFavoriteGenres() + "\n"
+                + "playlists: {");
+
+        for (int i = 0; i < getPlaylists().size()-1; i++) {
+            text.append(getPlaylists().get(i).getName());
+            text.append(", ");
+        }
+        text.append(getPlaylists().getLast().getName());
+        text.append("}\n");
+
+        return text.toString();
+    }
 }

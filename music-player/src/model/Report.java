@@ -37,4 +37,10 @@ public class Report {
     public void setReportMassage(String reportMassage) {
         this.reportMassage = reportMassage;
     }
+
+    @Override
+    public String toString() {
+        return "Reporter: " + reporter + "\nReported Artist: "
+                + reportedArtist + "\nReport Massage: " + reportMassage + "\n";
+    }
 }

@@ -15,4 +15,21 @@ public class Podcaster extends Artist {
     public ArrayList<Podcast> getPodcasts() {
         return podcasts;
     }
+    @Override
+    public String toString() {
+        StringBuilder text = new StringBuilder(getFullName() + "\tuser name: " + getUsername() + "\n"
+                + "phone number: " + getPhoneNumber() + "\n"
+                + "email: " + getEmail() + "\n"
+                + "date of birth: " + getDateOfBirth() + "\n"
+                + "biography: " + getBiography() + "\n"
+                + "podcasts: {");
+        for (int i = 0; i < getPodcasts().size()-1; i++) {
+            text.append(getPodcasts().get(i).getTitle());
+            text.append(", ");
+        }
+        text.append(getPodcasts().getLast().getTitle());
+        text.append("}\n");
+
+        return text.toString();
+    }
 }

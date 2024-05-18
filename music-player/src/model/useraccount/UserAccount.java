@@ -19,6 +19,14 @@ abstract public class UserAccount {
         this.dateOfBirth = dateOfBirth;
     }
 
+    @Override
+    public String toString() {
+        return (fullName + "\tuser name: " + username + "\n"
+        + "phone number: " + phoneNumber + "\n"
+        + "email: " + email + "\n"
+        + "date of birth: " + dateOfBirth + "\n");
+    }
+
     public String getUsername() {
         return username;
     }
