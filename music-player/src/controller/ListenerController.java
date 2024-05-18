@@ -3,15 +3,17 @@ package controller;
 import model.Database;
 import model.Genre;
 import model.Playlist;
+import model.Report;
 import model.audio.Audio;
 import model.useraccount.UserAccount;
+import model.useraccount.artist.Artist;
 import model.useraccount.listener.FreeListener;
 import model.useraccount.listener.Listener;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+
 
 public class ListenerController {
     private static ListenerController listenerController;
@@ -237,4 +239,33 @@ public class ListenerController {
         }
         return results;
     }
+
+    public ArrayList<UserAccount> getFollowings() {
+        return listener.getFollowing();
+    }
+
+    public Report reportArtist(String username, String explanation) {
+        UserAccount targetUserAccount = findUsername(username);
+        Artist targetArtist = null;
+        if (targetUserAccount instanceof Artist) {
+            targetArtist = (Artist) targetUserAccount;
+        }
+        if (targetArtist == null) return null;
+
+        Report report = new Report(listener, targetArtist, explanation);
+        Database.getDatabase().getReports().add(report);
+        return report;
+    }
+
+    public ArrayList<Artist> getArtistList() {
+        ArrayList<Artist> artists = new ArrayList<>();
+        for (UserAccount userAccount : Database.getDatabase().getUserAccounts()) {
+            if (userAccount instanceof Artist) {
+                artists.add((Artist) userAccount);
+            }
+        }
+        return artists;
+    }
+
+
 }

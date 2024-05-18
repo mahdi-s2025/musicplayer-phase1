@@ -29,9 +29,13 @@ public class PremiumListener extends Listener {
 
         for (int i = 0; i < getPlaylists().size()-1; i++) {
             text.append(getPlaylists().get(i).getName());
+            text.append(" ");
+            text.append(getPlaylists().get(i).getID());
             text.append(", ");
         }
         text.append(getPlaylists().getLast().getName());
+        text.append(" ");
+        text.append(getPlaylists().getLast().getID());
         text.append("}\n");
 
         return text.toString();
