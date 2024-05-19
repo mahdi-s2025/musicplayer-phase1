@@ -56,9 +56,16 @@ public class ListenerController {
         return freeListener;
     }
 
-    public UserAccount findUsername(String username) {
+    public UserAccount findUserAccountByUsername(String username) {
         for (UserAccount user : Database.getDatabase().getUserAccounts()) {
             if (user.getUsername().equals(username)) return user;
+        }
+        return null;
+    }
+
+    public UserAccount findUserAccountByName(String name) {
+        for (UserAccount user : Database.getDatabase().getUserAccounts()) {
+            if (user.getFullName().equals(name)) return user;
         }
         return null;
     }
@@ -104,7 +111,7 @@ public class ListenerController {
     }
 
     public Listener login(String username, String password) {
-        Listener targetListener = (Listener) findUsername(username);
+        Listener targetListener = (Listener) findUserAccountByUsername(username);
         if (targetListener.getPassword().equals(password)) {
             setListener(targetListener);
             return targetListener;
@@ -175,6 +182,7 @@ public class ListenerController {
         else {
             listener.getAudioPlayNum().put(targetAudio, 1);
         }
+        listener.getGenrePlayNum().put(targetAudio.getGenre(), listener.getGenrePlayNum().get(targetAudio.getGenre()) + 1);
         return targetAudio;
     }
 
@@ -182,6 +190,7 @@ public class ListenerController {
         Audio targetAudio = findAudio(ID);
         if (targetAudio == null) return false;
         targetAudio.setLikeNumber(targetAudio.getLikeNumber() + 1);
+        listener.getGenreLikeNum().put(targetAudio.getGenre(), listener.getGenreLikeNum().get(targetAudio.getGenre()) + 1);
         return true;
     }
 
@@ -250,7 +259,7 @@ public class ListenerController {
     }
 
     public Report reportArtist(String username, String explanation) {
-        UserAccount targetUserAccount = findUsername(username);
+        UserAccount targetUserAccount = findUserAccountByUsername(username);
         Artist targetArtist = null;
         if (targetUserAccount instanceof Artist) {
             targetArtist = (Artist) targetUserAccount;
@@ -273,7 +282,7 @@ public class ListenerController {
     }
 
     public Artist getArtist(String username) {
-        UserAccount targetUserAccount = findUsername(username);
+        UserAccount targetUserAccount = findUserAccountByUsername(username);
         Artist targetArtist = null;
         if (targetUserAccount instanceof Artist) {
             targetArtist = (Artist) targetUserAccount;
@@ -282,7 +291,7 @@ public class ListenerController {
     }
 
     public boolean follow(String username) {
-        UserAccount targetUserAccount = findUsername(username);
+        UserAccount targetUserAccount = findUserAccountByUsername(username);
         Artist targetArtist = null;
         if (targetUserAccount instanceof Artist) {
             targetArtist = (Artist) targetUserAccount;
@@ -306,5 +315,25 @@ public class ListenerController {
         }
         return targetPlaylist;
     }
-    
+
+    public ArrayList<Map.Entry<Audio, Integer>> recommendedAudios() {
+        Map<Audio, Integer> audioScore = new HashMap<>();
+        for (Audio audio : Database.getDatabase().getAudioFiles()) {
+            int score = listener.getGenrePlayNum().get(audio.getGenre());
+            score += listener.getGenreLikeNum().get(audio.getGenre()) * 2;
+            UserAccount audioArtist = findUserAccountByName(audio.getArtistName()); // maybe can
+            if (listener.getFollowing().contains(audioArtist)) {                // implement better
+                score += 30;
+            }
+            if (listener.getFavoriteGenres().contains(audio.getGenre())) {
+                score += 40;
+            }
+            audioScore.put(audio, score);
+        }
+        Comparator<Map.Entry<Audio, Integer>> orderBase = (Map.Entry<Audio, Integer> o1, Map.Entry<Audio, Integer> o2)
+                -> o2.getValue() - o1.getValue();
+        ArrayList<Map.Entry<Audio, Integer>> sortedList = new ArrayList<>(audioScore.entrySet());
+        sortedList.sort(orderBase);
+        return sortedList;
+    }
 }
