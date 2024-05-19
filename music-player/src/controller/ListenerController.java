@@ -1,16 +1,15 @@
 package controller;
 
-import model.Database;
-import model.Genre;
-import model.Playlist;
-import model.Report;
+import model.*;
 import model.audio.Audio;
 import model.useraccount.UserAccount;
 import model.useraccount.artist.Artist;
 import model.useraccount.listener.FreeListener;
 import model.useraccount.listener.Listener;
+import model.useraccount.listener.PremiumListener;
 
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -335,5 +334,55 @@ public class ListenerController {
         ArrayList<Map.Entry<Audio, Integer>> sortedList = new ArrayList<>(audioScore.entrySet());
         sortedList.sort(orderBase);
         return sortedList;
+    }
+
+    public boolean addToCredit(double amount) {
+        listener.setCredit(listener.getCredit() + amount);
+        return true;
+    }
+
+    public boolean premiumBuyOrRenewal(PremiumPlans plan) {
+        if (listener.getCredit() >= plan.getCost()) {
+            if (listener instanceof FreeListener) {
+                PremiumListener premiumListener = new PremiumListener(listener.getUsername(), listener.getPassword(),
+                        listener.getFullName(), listener.getEmail(), listener.getPhoneNumber(),
+                        listener.getDateOfBirth(), plan.getPeriod());
+                premiumListener.setCredit(listener.getCredit() - plan.getCost());
+                premiumListener.getPlaylists().addAll(listener.getPlaylists());
+                premiumListener.getAudioPlayNum().putAll(listener.getAudioPlayNum());
+                premiumListener.getFollowing().addAll(listener.getFollowing());
+                premiumListener.getGenrePlayNum().putAll(listener.getGenrePlayNum());
+                premiumListener.getGenreLikeNum().putAll(listener.getGenreLikeNum());
+                premiumListener.getFavoriteGenres().addAll(listener.getFavoriteGenres());
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.DATE, plan.getPeriod());
+                premiumListener.setSubscriptionExpirationDate(calendar.getTime());
+                Database.getDatabase().getUserAccounts().remove(listener);
+                setListener(premiumListener);
+                Database.getDatabase().getUserAccounts().add(premiumListener);
+            }
+            else {
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.DATE, plan.getPeriod());
+                listener.setSubscriptionExpirationDate(calendar.getTime());
+                PremiumListener premiumListener = (PremiumListener) listener;
+                premiumListener.setSubRemainingDays(plan.getPeriod());
+                premiumListener.setCredit(premiumListener.getCredit() - plan.getCost());
+            }
+            PremiumListener premiumListener = (PremiumListener) listener;
+            final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+            final Runnable task = () -> {
+                premiumListener.setSubRemainingDays(premiumListener.getSubRemainingDays() - 1);
+            };
+            scheduler.scheduleAtFixedRate(task, 0, 1, TimeUnit.DAYS); // for test change time unit to seconds
+            return true;
+        }
+        return false;
+    }
+
+    public String getSubscriptionDetails() {
+        PremiumListener premiumListener = (PremiumListener) listener;
+        return "Subscription Expiration Date: " + premiumListener.getSubscriptionExpirationDate() + "\n" +
+                "Subscription Remaining Days: " + premiumListener.getSubRemainingDays() + "\n";
     }
 }
