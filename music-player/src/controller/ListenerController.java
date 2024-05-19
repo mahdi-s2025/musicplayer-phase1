@@ -169,7 +169,12 @@ public class ListenerController {
         Audio targetAudio = findAudio(ID);
         if (targetAudio == null) return null;
         targetAudio.setPlayNumber(targetAudio.getPlayNumber() + 1);
-        listener.getAudioPlayNum().put(targetAudio, listener.getAudioPlayNum().get(targetAudio) + 1); // It might do incorrectly.
+        if (listener.getAudioPlayNum().containsKey(targetAudio)) {
+            listener.getAudioPlayNum().put(targetAudio, listener.getAudioPlayNum().get(targetAudio) + 1);
+        }
+        else {
+            listener.getAudioPlayNum().put(targetAudio, 1);
+        }
         return targetAudio;
     }
 
@@ -267,5 +272,39 @@ public class ListenerController {
         return artists;
     }
 
+    public Artist getArtist(String username) {
+        UserAccount targetUserAccount = findUsername(username);
+        Artist targetArtist = null;
+        if (targetUserAccount instanceof Artist) {
+            targetArtist = (Artist) targetUserAccount;
+        }
+        return targetArtist;
+    }
 
+    public boolean follow(String username) {
+        UserAccount targetUserAccount = findUsername(username);
+        Artist targetArtist = null;
+        if (targetUserAccount instanceof Artist) {
+            targetArtist = (Artist) targetUserAccount;
+        }
+        if (targetArtist == null) return false;
+        listener.getFollowing().add(targetArtist);
+        targetArtist.getFollowers().add(listener);
+        return true;
+    }
+
+    public ArrayList<Playlist> getPlaylists() {
+        return listener.getPlaylists();
+    }
+
+    public Playlist findPlaylist(String name) {
+        Playlist targetPlaylist = null;
+        for (Playlist playlist : listener.getPlaylists()) {
+            if (playlist.getName().equals(name)) {
+                targetPlaylist = playlist;
+            }
+        }
+        return targetPlaylist;
+    }
+    
 }
