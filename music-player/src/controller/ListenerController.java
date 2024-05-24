@@ -10,8 +10,6 @@ import model.useraccount.listener.PremiumListener;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class ListenerController {
@@ -31,6 +29,7 @@ public class ListenerController {
     public void setListener(Listener listener) {
         this.listener = listener;
     }
+
     public Listener getListener() {
         return listener;
     }

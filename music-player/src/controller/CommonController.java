@@ -193,7 +193,7 @@ abstract public class CommonController {
         return artists;
     }
 
-    public Artist getArtist(String username) {
+    public static Artist getArtist(String username) {
         UserAccount targetUserAccount = findUserAccountByUsername(username);
         Artist targetArtist = null;
         if (targetUserAccount instanceof Artist) {
@@ -201,4 +201,9 @@ abstract public class CommonController {
         }
         return targetArtist;
     }
+
+    public static ArrayList<Audio> getAudioList() {
+        return Database.getDatabase().getAudioFiles();
+    }
+
 }
