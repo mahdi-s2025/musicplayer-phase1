@@ -199,6 +199,7 @@ abstract public class CommonController {
         if (targetUserAccount instanceof Artist) {
             targetArtist = (Artist) targetUserAccount;
         }
+        ArtistController.getArtistController().updateIncome();
         return targetArtist;
     }
 
@@ -206,4 +207,15 @@ abstract public class CommonController {
         return Database.getDatabase().getAudioFiles();
     }
 
+    public static Date getDateOfBirth(int dateOfBirthTmp) {
+        int dayOfMonth = dateOfBirthTmp % 100;
+        dateOfBirthTmp /= 100;
+
+        int month = (dateOfBirthTmp % 100) - 1;
+        dateOfBirthTmp /= 100;
+
+        int year = dateOfBirthTmp;
+
+        return new GregorianCalendar(year, month, dayOfMonth).getTime();
+    }
 }

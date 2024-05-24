@@ -36,15 +36,8 @@ public class ListenerController {
 
     public FreeListener signUp(String username, String password, String fullName,  // it must send an object to view
                        String email, String phoneNumber, int dateOfBirthTmp) {
-        int dayOfMonth = dateOfBirthTmp % 100;
-        dateOfBirthTmp /= 100;
 
-        int month = (dateOfBirthTmp % 100) - 1;
-        dateOfBirthTmp /= 100;
-
-        int year = dateOfBirthTmp;
-
-        Date dateOfBirth = new GregorianCalendar(year, month, dayOfMonth).getTime();
+        Date dateOfBirth = CommonController.getDateOfBirth(dateOfBirthTmp);
 
         FreeListener freeListener = new FreeListener(username, password, fullName,
                 email, phoneNumber, dateOfBirth);
@@ -233,7 +226,14 @@ public class ListenerController {
 
     public String getSubscriptionDetails() {
         PremiumListener premiumListener = (PremiumListener) listener;
-        return "Subscription Expiration Date: " + premiumListener.getSubscriptionExpirationDate() + "\n" +
-                "Subscription Remaining Days: " + premiumListener.getSubRemainingDays() + "\n";
+        String result = "Subscription Expiration Date: " + premiumListener.getSubscriptionExpirationDate() + "\n" +
+                "Subscription Remaining Days: " + premiumListener.getSubRemainingDays();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(premiumListener.getSubscriptionExpirationDate());
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        premiumListener.setSubscriptionExpirationDate(calendar.getTime());
+
+        premiumListener.setSubRemainingDays(premiumListener.getSubRemainingDays() - 1);
+        return result;
     }
 }
