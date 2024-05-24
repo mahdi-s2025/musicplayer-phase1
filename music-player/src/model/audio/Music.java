@@ -32,6 +32,6 @@ public class Music extends Audio {
         + "Likes: " + getLikeNumber() + "\tPlays: " + getPlayNumber() + "\tGenre: " + getGenre() + "\n"
         + "Link: " + getLink() + "\n"
         + "Cover: " + getCover() + "\n"
-        + "Lyric: " + lyric + "\n");
+        + "Lyric: " + lyric);
     }
 }

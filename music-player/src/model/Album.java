@@ -46,10 +46,14 @@ public class Album {
                 + "music list: {");
         for (int i = 0; i < musicList.size()-1; i++) {
             text.append(musicList.get(i).getTitle());
+            text.append(" ");
+            text.append(musicList.get(i).getID());
             text.append(", ");
         }
         text.append(musicList.getLast().getTitle());
-        text.append("}\n");
+        text.append(" ");
+        text.append(musicList.getLast().getID());
+        text.append("}");
         return text.toString();
     }
 }

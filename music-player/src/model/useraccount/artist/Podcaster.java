@@ -25,10 +25,14 @@ public class Podcaster extends Artist {
                 + "podcasts: {");
         for (int i = 0; i < getPodcasts().size()-1; i++) {
             text.append(getPodcasts().get(i).getTitle());
+            text.append(" ");
+            text.append(getPodcasts().get(i).getID());
             text.append(", ");
         }
         text.append(getPodcasts().getLast().getTitle());
-        text.append("}\n");
+        text.append(" ");
+        text.append(getPodcasts().getLast().getID());
+        text.append("}");
 
         return text.toString();
     }

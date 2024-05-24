@@ -27,10 +27,14 @@ public class Singer extends Artist {
                 + "albums: {");
         for (int i = 0; i < getAlbums().size()-1; i++) {
             text.append(getAlbums().get(i).getName());
+            text.append(" ");
+            text.append(getAlbums().get(i).getID());
             text.append(", ");
         }
         text.append(getAlbums().getLast().getName());
-        text.append("}\n");
+        text.append(" ");
+        text.append(getAlbums().getLast().getID());
+        text.append("}");
 
         return text.toString();
     }
