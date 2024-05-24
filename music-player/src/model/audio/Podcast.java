@@ -22,6 +22,6 @@ public class Podcast extends Audio {
                 + "Likes: " + getLikeNumber() + "\tPlays: " + getPlayNumber() + "\tGenre: " + getGenre() + "\n"
                 + "Link: " + getLink() + "\n"
                 + "Cover: " + getCover() + "\n"
-                + "Caption: " + caption + "\n");
+                + "Caption: " + caption);
     }
 }

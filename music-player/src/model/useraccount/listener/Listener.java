@@ -93,7 +93,7 @@ abstract public class Listener extends UserAccount {   // abstracting is by my o
         text.append(playlists.getLast().getName());
         text.append(" ");
         text.append(playlists.getLast().getID());
-        text.append("}\n");
+        text.append("}");
 
         return text.toString();
     }

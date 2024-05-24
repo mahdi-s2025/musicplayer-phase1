@@ -32,7 +32,7 @@ public class Podcaster extends Artist {
         text.append(getPodcasts().getLast().getTitle());
         text.append(" ");
         text.append(getPodcasts().getLast().getID());
-        text.append("}\n");
+        text.append("}");
 
         return text.toString();
     }

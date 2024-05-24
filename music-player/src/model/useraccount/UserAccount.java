@@ -24,7 +24,7 @@ abstract public class UserAccount {
         return (fullName + "\tuser name: " + username + "\n"
         + "phone number: " + phoneNumber + "\n"
         + "email: " + email + "\n"
-        + "date of birth: " + dateOfBirth + "\n");
+        + "date of birth: " + dateOfBirth);
     }
 
     public String getUsername() {

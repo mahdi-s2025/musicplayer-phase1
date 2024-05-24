@@ -53,7 +53,7 @@ public class Album {
         text.append(musicList.getLast().getTitle());
         text.append(" ");
         text.append(musicList.getLast().getID());
-        text.append("}\n");
+        text.append("}");
         return text.toString();
     }
 }

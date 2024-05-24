@@ -56,7 +56,7 @@ public class Playlist {
         text.append(audios.getLast().getTitle());
         text.append(" ");
         text.append(audios.getLast().getID());
-        text.append("}\n");
+        text.append("}");
         return text.toString();
     }
 }
