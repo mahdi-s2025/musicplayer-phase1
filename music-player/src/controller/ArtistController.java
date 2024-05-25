@@ -44,13 +44,13 @@ public class ArtistController {
 
         Artist newArtist = null;
 
-        if (flag.equals("-S")) {
+        if (flag.equals("S")) {
             Singer singer = new Singer(username, password, fullName,
                     email, phoneNumber, dateOfBirth, bio);
             newArtist = singer;
             setArtist(singer);
             Database.getDatabase().getUserAccounts().add(singer);
-        } else if (flag.equals("-P")) {
+        } else if (flag.equals("P")) {
             Podcaster podcaster = new Podcaster(username, password, fullName,
                     email, phoneNumber, dateOfBirth, bio);
             newArtist = podcaster;

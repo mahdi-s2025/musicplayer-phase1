@@ -5,9 +5,8 @@ import controller.AdminController;
 import controller.ArtistController;
 import controller.CommonController;
 import controller.ListenerController;
-import model.Genre;
-import model.useraccount.Admin;
 import model.useraccount.UserAccount;
+import model.useraccount.artist.Artist;
 
 import java.util.Scanner;
 
@@ -62,14 +61,53 @@ public class MainView {
         while (!commands[0].equals("exit")) {
             commands = sc.nextLine().split(" -");
             switch (commands[0]) {
-                case "Signup":
-                {
+                case "Signup": {
                     signupView(commands);
                     break;
                 }
-                case "Login":
-                {
-                    
+                case "Login": {
+                    if (commands.length != 3) {
+                        System.out.println("Wrong number of arguments!");
+                        break;
+                    }
+                    UserAccount targetUser = CommonController.login(commands[1], commands[2]);
+                    if (targetUser == null) {
+                        System.out.println("Login failed! Wrong username or password!");
+                    } else {
+                        setLoggedInUser(targetUser);
+                        System.out.println("Login successful!");
+                        System.out.println(getLoggedInUser());
+                        if (targetUser instanceof Artist artist) {
+                            System.out.println("income: " + artist.getIncome());
+                        }
+                    }
+                    break;
+                }
+                case "Logout": {
+                    if (commands.length != 1) {
+                        System.out.println("Wrong number of arguments!");
+                        break;
+                    }
+                    AdminController.getAdminController().setAdmin(null);
+                    ListenerController.getListenerController().setListener(null);
+                    ArtistController.getArtistController().setArtist(null);
+                    setLoggedInUser(null);
+                    System.out.println("Logout successful!");
+                    break;
+                }
+                case "AccountInfo": {
+                    if (commands.length != 1) {
+                        System.out.println("Wrong number of arguments!");
+                        break;
+                    }
+                    if (getLoggedInUser() != null) {
+                        System.out.println(getLoggedInUser());
+                        if (getLoggedInUser() instanceof Artist artist) {
+                            ArtistController.getArtistController().updateIncome();
+                            System.out.println("income: " + artist.getIncome());
+                        }
+                    }
+                    break;
                 }
             }
         }
@@ -153,10 +191,12 @@ public class MainView {
                         System.out.println("Invalid number of arguments");
                         break;
                     } else {
-                        setLoggedInUser(ArtistController.getArtistController().signUp(commands[2], commands[3], commands[4],
-                                commands[5], commands[6], Integer.parseInt(commands[7]), commands[8], commands[1]));
+                        Artist artist = ArtistController.getArtistController().signUp(commands[2], commands[3], commands[4],
+                                commands[5], commands[6], Integer.parseInt(commands[7]), commands[8], commands[1]);
+                        setLoggedInUser(artist);
                         System.out.println("Signed up successful");
                         System.out.println(getLoggedInUser());
+                        System.out.println("income: " + artist.getIncome());
                     }
                     break;
                 }

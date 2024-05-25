@@ -1,7 +1,9 @@
 package controller;
 
+import model.Album;
 import model.Database;
 import model.audio.Audio;
+import model.useraccount.Admin;
 import model.useraccount.UserAccount;
 import model.useraccount.artist.Artist;
 import model.useraccount.listener.Listener;
@@ -66,15 +68,19 @@ abstract public class CommonController {
         return phoneNumberMatcher.matches();
     }
 
-    public static Listener login(String username, String password) {   // wrong method
-        Listener targetListener = (Listener) findUserAccountByUsername(username);
-        if (targetListener != null && targetListener.getPassword().equals(password)) {
-            //setListener(targetListener);
-            return targetListener;
+    public static UserAccount login(String username, String password) {
+        UserAccount targetUser = findUserAccountByUsername(username);
+        if (targetUser != null && targetUser.getPassword().equals(password)) {
+            switch (targetUser) {
+                case Listener listener -> ListenerController.getListenerController().setListener(listener);
+                case Artist artist -> ArtistController.getArtistController().setArtist(artist);
+
+                case Admin admin -> AdminController.getAdminController().setAdmin(admin);
+                default -> {}
+            }
+            return targetUser;
         }
         return null;
-        // it should override. the implement is not complete.
-        // it should send an object to view and its own class.
     }
 
     public static Audio findAudio(int ID) {
@@ -199,7 +205,6 @@ abstract public class CommonController {
         if (targetUserAccount instanceof Artist) {
             targetArtist = (Artist) targetUserAccount;
         }
-        ArtistController.getArtistController().updateIncome();
         return targetArtist;
     }
 
