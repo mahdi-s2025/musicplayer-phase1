@@ -3,7 +3,6 @@ package controller;
 
 import model.Album;
 import model.Database;
-import model.Playlist;
 import model.audio.Audio;
 import model.audio.Music;
 import model.audio.Podcast;
@@ -37,7 +36,7 @@ public class ArtistController {
         return artist;
     }
 
-    public Artist signUp(String username, String password, String fullName,  // it must send an object to view
+    public Artist signUp(String username, String password, String fullName,
                                String email, String phoneNumber, int dateOfBirthTmp, String bio, String flag) {
 
         Date dateOfBirth = CommonController.getDateOfBirth(dateOfBirthTmp);
@@ -65,7 +64,7 @@ public class ArtistController {
         return artist.getFollowers();
     }
 
-    public String playsStatic() {
+    public String playsStatistics() {
         StringBuilder result = new StringBuilder();
         if (artist instanceof Singer tmp) {
 

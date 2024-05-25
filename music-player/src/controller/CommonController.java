@@ -74,7 +74,6 @@ abstract public class CommonController {
             switch (targetUser) {
                 case Listener listener -> ListenerController.getListenerController().setListener(listener);
                 case Artist artist -> ArtistController.getArtistController().setArtist(artist);
-
                 case Admin admin -> AdminController.getAdminController().setAdmin(admin);
                 default -> {}
             }

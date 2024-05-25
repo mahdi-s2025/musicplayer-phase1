@@ -5,8 +5,10 @@ import controller.AdminController;
 import controller.ArtistController;
 import controller.CommonController;
 import controller.ListenerController;
+import model.useraccount.Admin;
 import model.useraccount.UserAccount;
 import model.useraccount.artist.Artist;
+import model.useraccount.listener.Listener;
 
 import java.util.Scanner;
 
@@ -78,6 +80,7 @@ public class MainView {
                         System.out.println("Login successful!");
                         System.out.println(getLoggedInUser());
                         if (targetUser instanceof Artist artist) {
+                            ArtistController.getArtistController().updateIncome();
                             System.out.println("income: " + artist.getIncome());
                         }
                     }
@@ -108,6 +111,14 @@ public class MainView {
                         }
                     }
                     break;
+                }
+                default: {
+                    switch (getLoggedInUser()) {
+                        case Listener ignored -> ListenerView.getListenerView().start(commands);
+                        case Artist ignored -> ArtistView.getArtistView().start(commands);
+                        case Admin ignored -> AdminView.getAdminView().start(commands);
+                        default -> System.out.println("You should login first!");
+                    }
                 }
             }
         }
