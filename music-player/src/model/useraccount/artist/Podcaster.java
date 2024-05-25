@@ -23,15 +23,17 @@ public class Podcaster extends Artist {
                 + "date of birth: " + getDateOfBirth() + "\n"
                 + "biography: " + getBiography() + "\n"
                 + "podcasts: {");
-        for (int i = 0; i < getPodcasts().size()-1; i++) {
-            text.append(getPodcasts().get(i).getTitle());
+        if (!getPodcasts().isEmpty()){
+            for (int i = 0; i < getPodcasts().size() - 1; i++) {
+                text.append(getPodcasts().get(i).getTitle());
+                text.append(" ");
+                text.append(getPodcasts().get(i).getID());
+                text.append(", ");
+            }
+            text.append(getPodcasts().getLast().getTitle());
             text.append(" ");
-            text.append(getPodcasts().get(i).getID());
-            text.append(", ");
+            text.append(getPodcasts().getLast().getID());
         }
-        text.append(getPodcasts().getLast().getTitle());
-        text.append(" ");
-        text.append(getPodcasts().getLast().getID());
         text.append("}");
 
         return text.toString();

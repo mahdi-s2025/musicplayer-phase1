@@ -44,15 +44,17 @@ public class Album {
     public String toString() {
         StringBuilder text = new StringBuilder(name + "\t" + singerName + "\tID: " + ID + "\n"
                 + "music list: {");
-        for (int i = 0; i < musicList.size()-1; i++) {
-            text.append(musicList.get(i).getTitle());
+        if (!musicList.isEmpty()){
+            for (int i = 0; i < musicList.size() - 1; i++) {
+                text.append(musicList.get(i).getTitle());
+                text.append(" ");
+                text.append(musicList.get(i).getID());
+                text.append(", ");
+            }
+            text.append(musicList.getLast().getTitle());
             text.append(" ");
-            text.append(musicList.get(i).getID());
-            text.append(", ");
+            text.append(musicList.getLast().getID());
         }
-        text.append(musicList.getLast().getTitle());
-        text.append(" ");
-        text.append(musicList.getLast().getID());
         text.append("}");
         return text.toString();
     }

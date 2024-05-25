@@ -25,15 +25,17 @@ public class Singer extends Artist {
                 + "date of birth: " + getDateOfBirth() + "\n"
                 + "biography: " + getBiography() + "\n"
                 + "albums: {");
-        for (int i = 0; i < getAlbums().size()-1; i++) {
-            text.append(getAlbums().get(i).getName());
+        if (!albums.isEmpty()){
+            for (int i = 0; i < getAlbums().size() - 1; i++) {
+                text.append(getAlbums().get(i).getName());
+                text.append(" ");
+                text.append(getAlbums().get(i).getID());
+                text.append(", ");
+            }
+            text.append(getAlbums().getLast().getName());
             text.append(" ");
-            text.append(getAlbums().get(i).getID());
-            text.append(", ");
+            text.append(getAlbums().getLast().getID());
         }
-        text.append(getAlbums().getLast().getName());
-        text.append(" ");
-        text.append(getAlbums().getLast().getID());
         text.append("}");
 
         return text.toString();

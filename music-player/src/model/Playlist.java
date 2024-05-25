@@ -47,15 +47,17 @@ public class Playlist {
         StringBuilder text = new StringBuilder(name + "\t" + creatorName + "\tID: " + ID + "\n"
                 + "audio list: {");
 
-        for (int i = 0; i < audios.size()-1; i++) {
-            text.append(audios.get(i).getTitle());
+        if (!audios.isEmpty()) {
+            for (int i = 0; i < audios.size() - 1; i++) {
+                text.append(audios.get(i).getTitle());
+                text.append(" ");
+                text.append(audios.get(i).getID());
+                text.append(", ");
+            }
+            text.append(audios.getLast().getTitle());
             text.append(" ");
-            text.append(audios.get(i).getID());
-            text.append(", ");
+            text.append(audios.getLast().getID());
         }
-        text.append(audios.getLast().getTitle());
-        text.append(" ");
-        text.append(audios.getLast().getID());
         text.append("}");
         return text.toString();
     }

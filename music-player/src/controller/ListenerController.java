@@ -34,7 +34,7 @@ public class ListenerController {
         return listener;
     }
 
-    public FreeListener signUp(String username, String password, String fullName,  // it must send an object to view
+    public FreeListener signUp(String username, String password, String fullName,
                        String email, String phoneNumber, int dateOfBirthTmp) {
 
         Date dateOfBirth = CommonController.getDateOfBirth(dateOfBirthTmp);
