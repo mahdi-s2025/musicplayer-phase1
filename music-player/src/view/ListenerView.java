@@ -57,9 +57,9 @@ public class ListenerView {
                 if (commands.length != 1) {
                     System.out.println("Wrong number of arguments");
                 } else {
-                    System.out.print("Artists: {");
+                    System.out.println("Artists: {");
                     for (Artist artist : CommonController.getArtistList()) {
-                        System.out.print("(" + artist.getFullName() + ", " + artist.getUsername() + "), ");
+                        System.out.println("(" + artist.getFullName() + ", " + artist.getUsername() + "), ");
                     }
                     System.out.println("}");
                 }
@@ -222,6 +222,11 @@ public class ListenerView {
                 } else {
                     String details = ListenerController.getListenerController().getSubscriptionDetails();
                     System.out.println(details == null ? "You don't have any subscriptions" : details);
+                }
+            }
+            default -> {
+                if (!commands[0].equals("exit")) {
+                    System.out.println("Invalid command");
                 }
             }
         }

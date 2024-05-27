@@ -229,9 +229,7 @@ public class ListenerController {
             }
             PremiumListener premiumListener = (PremiumListener) listener;
             final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-            final Runnable task = () -> {
-                premiumListener.setSubRemainingDays(premiumListener.getSubRemainingDays() - 1);
-            };
+            final Runnable task = () -> premiumListener.setSubRemainingDays(premiumListener.getSubRemainingDays() - 1);
             scheduler.scheduleAtFixedRate(task, 0, 1, TimeUnit.DAYS); // for test change time unit to seconds
             return true;
         }

@@ -100,7 +100,7 @@ abstract public class CommonController {
 
     public static ArrayList<Audio> sortAudios(String flag) {
         ArrayList<Audio> results = Database.getDatabase().getAudioFiles();
-        Comparator<Audio> audioComparator = null;
+        Comparator<Audio> audioComparator;
         if (flag.equals("L")) {
             audioComparator = (Audio o1, Audio o2) -> o2.getLikeNumber() - o1.getLikeNumber();
         } else if (flag.equals("P")) {

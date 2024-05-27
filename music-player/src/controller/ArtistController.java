@@ -146,7 +146,7 @@ public class ArtistController {
     public Music publishMusic(String title, String artistName, String genre, String lyric, String link, String cover, int albumID) {
         Music newMusic = null;
 
-        if (artist instanceof Singer tmp) {
+        if (artist instanceof Singer) {
             Album targetAlbum = findAlbum(albumID);
             if (targetAlbum == null) return null;
             newMusic = new Music(title, artistName, genre, lyric, link, cover, albumID);
