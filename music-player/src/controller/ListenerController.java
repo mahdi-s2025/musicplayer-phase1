@@ -2,11 +2,13 @@ package controller;
 
 import model.*;
 import model.audio.Audio;
+import model.audio.Music;
 import model.useraccount.UserAccount;
 import model.useraccount.artist.Artist;
 import model.useraccount.listener.FreeListener;
 import model.useraccount.listener.Listener;
 import model.useraccount.listener.PremiumListener;
+import view.MainView;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -37,7 +39,7 @@ public class ListenerController {
     public FreeListener signUp(String username, String password, String fullName,
                        String email, String phoneNumber, int dateOfBirthTmp) {
 
-        Date dateOfBirth = CommonController.getDateOfBirth(dateOfBirthTmp);
+        Date dateOfBirth = CommonController.getDate(dateOfBirthTmp);
 
         FreeListener freeListener = new FreeListener(username, password, fullName,
                 email, phoneNumber, dateOfBirth);
@@ -92,16 +94,18 @@ public class ListenerController {
         Playlist targetPlaylist = findListenerPlaylist(playlistName);
         Audio targetAudio = CommonController.findAudio(ID);
 
-        if (listener instanceof FreeListener) {
-            if (targetPlaylist.getAudios().size() < FreeListener.getMaxMusicsNumberInPlaylist()) {
-                targetPlaylist.getAudios().add(targetAudio);
-                return true;
+        if (targetAudio != null && targetPlaylist != null) {
+            if (listener instanceof FreeListener) {
+                if (targetPlaylist.getAudios().size() < FreeListener.getMaxMusicsNumberInPlaylist()) {
+                    targetPlaylist.getAudios().add(targetAudio);
+                    return true;
+                } else return false;
             }
-            else return false;
-        }
 
-        targetPlaylist.getAudios().add(targetAudio);
-        return true;
+            targetPlaylist.getAudios().add(targetAudio);
+            return true;
+        }
+        return false;
     }
 
     public Audio playAudio(int ID) {
@@ -124,6 +128,12 @@ public class ListenerController {
         targetAudio.setLikeNumber(targetAudio.getLikeNumber() + 1);
         listener.getGenreLikeNum().put(targetAudio.getGenre(), listener.getGenreLikeNum().get(targetAudio.getGenre()) + 1);
         return true;
+    }
+
+    public String getLyric(int ID) {
+        Audio targetAudio = CommonController.findAudio(ID);
+        if (targetAudio instanceof Music music) return music.getLyric();
+        return null;
     }
 
     public ArrayList<UserAccount> getFollowings() {
@@ -180,9 +190,12 @@ public class ListenerController {
         return sortedList;
     }
 
-    public boolean addToCredit(double amount) {
+    public void addToCredit(double amount) {
         listener.setCredit(listener.getCredit() + amount);
-        return true;
+    }
+
+    public PremiumPlans[] getPremiumPlans() {
+        return PremiumPlans.values();
     }
 
     public boolean premiumBuyOrRenewal(PremiumPlans plan) {
@@ -204,6 +217,7 @@ public class ListenerController {
                 Database.getDatabase().getUserAccounts().remove(listener);
                 setListener(premiumListener);
                 Database.getDatabase().getUserAccounts().add(premiumListener);
+                MainView.getMainView().setLoggedInUser(premiumListener);
             }
             else {
                 Calendar calendar = Calendar.getInstance();
@@ -225,15 +239,17 @@ public class ListenerController {
     }
 
     public String getSubscriptionDetails() {
-        PremiumListener premiumListener = (PremiumListener) listener;
-        String result = "Subscription Expiration Date: " + premiumListener.getSubscriptionExpirationDate() + "\n" +
-                "Subscription Remaining Days: " + premiumListener.getSubRemainingDays();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(premiumListener.getSubscriptionExpirationDate());
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
-        premiumListener.setSubscriptionExpirationDate(calendar.getTime());
+        String result = null;
+        if (listener instanceof PremiumListener premiumListener){
+            result = "Subscription Expiration Date: " + premiumListener.getSubscriptionExpirationDate() + "\n" +
+                    "Subscription Remaining Days: " + premiumListener.getSubRemainingDays();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(premiumListener.getSubscriptionExpirationDate());
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            premiumListener.setSubscriptionExpirationDate(calendar.getTime());
 
-        premiumListener.setSubRemainingDays(premiumListener.getSubRemainingDays() - 1);
+            premiumListener.setSubRemainingDays(premiumListener.getSubRemainingDays() - 1);
+        }
         return result;
     }
 }

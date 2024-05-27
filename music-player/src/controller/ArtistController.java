@@ -39,7 +39,7 @@ public class ArtistController {
     public Artist signUp(String username, String password, String fullName,
                                String email, String phoneNumber, int dateOfBirthTmp, String bio, String flag) {
 
-        Date dateOfBirth = CommonController.getDateOfBirth(dateOfBirthTmp);
+        Date dateOfBirth = CommonController.getDate(dateOfBirthTmp);
 
         Artist newArtist = null;
 

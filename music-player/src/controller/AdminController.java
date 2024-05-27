@@ -36,7 +36,7 @@ public class AdminController {
 
     public Admin signUp(String username, String password, String fullName, String email,
                         String phoneNumber, int dateOfBirthTmp) {
-        Date dateOfBirth = CommonController.getDateOfBirth(dateOfBirthTmp);
+        Date dateOfBirth = CommonController.getDate(dateOfBirthTmp);
 
         Admin newAdmin = Admin.getAdmin(username, password, fullName, email, phoneNumber, dateOfBirth);
         setAdmin(newAdmin);

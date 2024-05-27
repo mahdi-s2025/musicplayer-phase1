@@ -1,6 +1,5 @@
 package controller;
 
-import model.Album;
 import model.Database;
 import model.audio.Audio;
 import model.useraccount.Admin;
@@ -102,9 +101,9 @@ abstract public class CommonController {
     public static ArrayList<Audio> sortAudios(String flag) {
         ArrayList<Audio> results = Database.getDatabase().getAudioFiles();
         Comparator<Audio> audioComparator = null;
-        if (flag.equals("-L")) {
+        if (flag.equals("L")) {
             audioComparator = (Audio o1, Audio o2) -> o2.getLikeNumber() - o1.getLikeNumber();
-        } else if (flag.equals("-P")) {
+        } else if (flag.equals("P")) {
             audioComparator = (Audio o1, Audio o2) -> o2.getPlayNumber() - o1.getPlayNumber();
         } else return null;
         results.sort(audioComparator);
@@ -114,32 +113,15 @@ abstract public class CommonController {
     public static List<Audio> filterAudios(String flag, String key) {
         List<Audio> results = null;
         switch (flag) {
-            case "-A" -> results = Database.getDatabase().getAudioFiles().stream().filter(
+            case "A" -> results = Database.getDatabase().getAudioFiles().stream().filter(
                     audio -> audio.getArtistName().equals(key)).toList();
-            case "-G" -> results = Database.getDatabase().getAudioFiles().stream().filter(
+            case "G" -> results = Database.getDatabase().getAudioFiles().stream().filter(
                     audio -> audio.getGenre().toString().equals(key)).toList();
-            case "-D" -> {
+            case "D" -> {
                 String[] tmpStartEndDate = key.split("-");
-                int tmpStartDate = Integer.parseInt(tmpStartEndDate[0]);
-                int tmpEndDate = Integer.parseInt(tmpStartEndDate[1]);
 
-                int dayOfMonth = tmpStartDate % 100;
-                tmpStartDate /= 100;
-
-                int month = (tmpStartDate % 100) - 1;
-                tmpStartDate /= 100;
-
-                int year = tmpStartDate;
-                Date startDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
-
-                dayOfMonth = tmpEndDate % 100;
-                tmpEndDate /= 100;
-
-                month = (tmpEndDate % 100) - 1;
-                tmpEndDate /= 100;
-
-                year = tmpEndDate;
-                Date endDate = new GregorianCalendar(year, month, dayOfMonth).getTime();
+                Date startDate = CommonController.getDate(Integer.parseInt(tmpStartEndDate[0]));
+                Date endDate = CommonController.getDate((Integer.parseInt(tmpStartEndDate[1])));
 
                 results = Database.getDatabase().getAudioFiles().stream().filter(
                         audio -> (audio.getPublishDate().after(startDate) &&
@@ -211,14 +193,14 @@ abstract public class CommonController {
         return Database.getDatabase().getAudioFiles();
     }
 
-    public static Date getDateOfBirth(int dateOfBirthTmp) {
-        int dayOfMonth = dateOfBirthTmp % 100;
-        dateOfBirthTmp /= 100;
+    public static Date getDate(int date) {
+        int dayOfMonth = date % 100;
+        date /= 100;
 
-        int month = (dateOfBirthTmp % 100) - 1;
-        dateOfBirthTmp /= 100;
+        int month = (date % 100) - 1;
+        date /= 100;
 
-        int year = dateOfBirthTmp;
+        int year = date;
 
         return new GregorianCalendar(year, month, dayOfMonth).getTime();
     }

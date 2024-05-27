@@ -33,22 +33,6 @@ public class MainView {
     public UserAccount getLoggedInUser() {
         return loggedInUser;
     }
-//    public void setListener(Listener listener) {
-//        this.listener = listener;
-//    }
-//
-//    public Listener getListener() {
-//        return listener;
-//    }
-
-
-//    public String getCommand() {
-//        return command;
-//    }
-//
-//    public void setCommand(String command) {
-//        this.command = command;
-//    }
 
     Scanner sc = new Scanner(System.in);
 
