@@ -40,7 +40,8 @@ public class Report {
 
     @Override
     public String toString() {
-        return "Reporter: " + reporter + "\nReported Artist: "
-                + reportedArtist + "\nReport Massage: " + reportMassage;
+        return "Reporter: " + reporter + "\n\nReported Artist: "
+                + reportedArtist + "\n\nReport Massage: " + reportMassage + "\n" +
+                "----------------------------------------" + "\n";
     }
 }

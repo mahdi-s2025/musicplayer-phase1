@@ -44,8 +44,8 @@ public class MainView {
             commands = sc.nextLine().split(" -");
             adminSignUpView(commands);
         }
+        commands = sc.nextLine().split(" -");
         while (!commands[0].equals("exit")) {
-            commands = sc.nextLine().split(" -");
             switch (commands[0]) {
                 case "Signup": {
                     signupView(commands);
@@ -97,14 +97,20 @@ public class MainView {
                     break;
                 }
                 default: {
-                    switch (getLoggedInUser()) {
-                        case Listener ignored -> ListenerView.getListenerView().start(commands);
-                        case Artist ignored -> ArtistView.getArtistView().start(commands);
-                        case Admin ignored -> AdminView.getAdminView().start(commands);
-                        default -> System.out.println("You should login first!");
+                    if (getLoggedInUser() != null) {
+                        switch (getLoggedInUser()) {
+                            case Listener ignored -> ListenerView.getListenerView().start(commands);
+                            case Artist ignored -> ArtistView.getArtistView().start(commands);
+                            case Admin ignored -> AdminView.getAdminView().start(commands);
+                            default -> System.out.println("You should login or sign up first!");
+                        }
+                    }
+                    else {
+                        System.out.println("You should login or sign up first!");
                     }
                 }
             }
+            commands = sc.nextLine().split(" -");
         }
     }
 

@@ -12,12 +12,16 @@ import view.MainView;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.logging.SocketHandler;
 
 
 public class ListenerController {
     private static ListenerController listenerController;
+    private final ArrayList<ScheduledExecutorService> executors;
 
-    private ListenerController() {}
+    private ListenerController() {
+        executors = new ArrayList<>();
+    }
 
     public static ListenerController getListenerController() {
         if (listenerController == null) {
@@ -35,6 +39,11 @@ public class ListenerController {
     public Listener getListener() {
         return listener;
     }
+
+    public ArrayList<ScheduledExecutorService> getExecutors() {
+        return executors;
+    }
+
 
     public FreeListener signUp(String username, String password, String fullName,
                        String email, String phoneNumber, int dateOfBirthTmp) {
@@ -78,17 +87,6 @@ public class ListenerController {
         }
         return null;
     }
-
-//    public Playlist findPlaylist(String name) {
-//        Playlist targetPlaylist = null;
-//        for (Playlist playlist : listener.getPlaylists()) {
-//            if (playlist.getName().equals(name)) {
-//                targetPlaylist = playlist;
-//            }
-//        }
-//        return targetPlaylist;
-//    }
-    // is the same as upper method
 
     public boolean addAudioToPlaylist(String playlistName, int ID) {
         Playlist targetPlaylist = findListenerPlaylist(playlistName);
@@ -228,9 +226,10 @@ public class ListenerController {
                 premiumListener.setCredit(premiumListener.getCredit() - plan.getCost());
             }
             PremiumListener premiumListener = (PremiumListener) listener;
-            final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
             final Runnable task = () -> premiumListener.setSubRemainingDays(premiumListener.getSubRemainingDays() - 1);
             scheduler.scheduleAtFixedRate(task, 0, 1, TimeUnit.DAYS); // for test change time unit to seconds
+            executors.add(scheduler);
             return true;
         }
         return false;
@@ -238,15 +237,14 @@ public class ListenerController {
 
     public String getSubscriptionDetails() {
         String result = null;
-        if (listener instanceof PremiumListener premiumListener){
-            result = "Subscription Expiration Date: " + premiumListener.getSubscriptionExpirationDate() + "\n" +
-                    "Subscription Remaining Days: " + premiumListener.getSubRemainingDays();
+        if (listener instanceof PremiumListener premiumListener) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(premiumListener.getSubscriptionExpirationDate());
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             premiumListener.setSubscriptionExpirationDate(calendar.getTime());
-
             premiumListener.setSubRemainingDays(premiumListener.getSubRemainingDays() - 1);
+            result = "Subscription Expiration Date: " + premiumListener.getSubscriptionExpirationDate() + "\n" +
+                    "Subscription Remaining Days: " + premiumListener.getSubRemainingDays();
         }
         return result;
     }

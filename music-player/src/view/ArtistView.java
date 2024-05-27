@@ -93,11 +93,7 @@ public class ArtistView {
                     }
                 }
             }
-            default -> {
-                if (!commands[0].equals("exit")) {
-                    System.out.println("Invalid command");
-                }
-            }
+            default -> System.out.println("Invalid command");
         }
     }
 }

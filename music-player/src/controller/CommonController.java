@@ -193,6 +193,13 @@ abstract public class CommonController {
         return Database.getDatabase().getAudioFiles();
     }
 
+    public static Audio getAudio(int ID) {
+        for (Audio audio : Database.getDatabase().getAudioFiles()) {
+            if (audio.getID() == ID) return audio;
+        }
+        return null;
+    }
+
     public static Date getDate(int date) {
         int dayOfMonth = date % 100;
         date /= 100;

@@ -224,11 +224,7 @@ public class ListenerView {
                     System.out.println(details == null ? "You don't have any subscriptions" : details);
                 }
             }
-            default -> {
-                if (!commands[0].equals("exit")) {
-                    System.out.println("Invalid command");
-                }
-            }
+            default -> System.out.println("Invalid command");
         }
     }
 

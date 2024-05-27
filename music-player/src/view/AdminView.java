@@ -50,7 +50,7 @@ public class AdminView {
                 if (commands.length != 2) {
                     System.out.println("Invalid number of arguments");
                 } else {
-                    Audio targetAudio = ListenerController.getListenerController().playAudio(Integer.parseInt(commands[1]));
+                    Audio targetAudio = CommonController.getAudio(Integer.parseInt(commands[1]));
                     System.out.println(targetAudio != null ? targetAudio : "Audio not found");
                 }
             }
@@ -84,11 +84,7 @@ public class AdminView {
                     System.out.println("}");
                 }
             }
-            default -> {
-                if (!commands[0].equals("exit")) {
-                    System.out.println("Invalid command");
-                }
-            }
+            default -> System.out.println("Invalid command");
         }
     }
 }
